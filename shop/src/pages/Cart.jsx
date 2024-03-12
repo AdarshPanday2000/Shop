@@ -30,8 +30,7 @@ function Cart() {
   }
 
   const payment = async (token) => {
-    console.log(token);
-    await axios.post("http://localhost:8000/pay", {
+    await axios.post("https://shop-api-azure-tau.vercel.app/pay", {
       amount: totalAmount * 100, //its calculating in cents, so change in usd
       token: token,
     });
