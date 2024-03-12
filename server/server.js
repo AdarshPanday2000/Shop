@@ -8,7 +8,13 @@ const port = process.env.PORT;
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://shop-api-azure-tau.vercel.app"],
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
 
 // This is your test secret API key.
 app.use(express.static("public"));
