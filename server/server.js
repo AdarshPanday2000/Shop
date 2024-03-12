@@ -13,9 +13,9 @@ app.use(cors());
 // This is your test secret API key.
 app.use(express.static("public"));
 
-const YOUR_DOMAIN = `http://localhost:${port}`;
+const YOUR_DOMAIN = `https://shop-api-azure-tau.vercel.app/`;
 
-app.get("/pay", (req, res) => {
+app.get("/", (req, res) => {
   res.send("hello");
 });
 
