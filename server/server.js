@@ -15,20 +15,30 @@ app.use(express.static("public"));
 
 const YOUR_DOMAIN = `http://localhost:${port}`;
 
+app.get("/pay", (req, res) => {
+  res.send("hello");
+});
+
 app.post("/pay", async (req, res) => {
-  await stripe.checkout.sessions.create({
-    line_items: [
-      {
-        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-        source: req.body.token.id,
-        price: req.body.amount,
-        currency: "usd",
-      },
-    ],
-    mode: "payment",
-    success_url: `${YOUR_DOMAIN}?success=true`,
-    cancel_url: `${YOUR_DOMAIN}?canceled=true`,
-  });
+  console.log(req.body.token);
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price: req.body.amount, // Use the Price ID here
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${YOUR_DOMAIN}?success=true`,
+      cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+    });
+
+    res.json({ id: session.id });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
 });
 
 app.listen(port, () => console.log("Running on port 8000"));
